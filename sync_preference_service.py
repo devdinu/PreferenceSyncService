@@ -1,4 +1,4 @@
-from bottle import route, run, get, delete, post, request, abort
+from bottle import route, run, get, delete, post, request, abort, default_app
 from pymongo import MongoClient
 import json
 import pdb
@@ -44,4 +44,4 @@ def get_preference(user_id):
     else:
         abort(404, "Preference Not Found")
 
-run(host='localhost', port=8888, debug=True, reloader=True)
+application = default_app()

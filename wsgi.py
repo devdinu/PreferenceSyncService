@@ -18,4 +18,4 @@ try:
 except IOError:
 	    pass
 
-from sync_preference_service import app as application
+from sync_preference_service import application as application
