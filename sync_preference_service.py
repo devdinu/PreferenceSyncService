@@ -1,7 +1,6 @@
 from bottle import route, run, get, delete, post, request, abort, default_app
 from pymongo import MongoClient
 import json
-import pdb
 
 client = MongoClient('localhost', 27017)
 preference_collection = client.preference_db.preferences
