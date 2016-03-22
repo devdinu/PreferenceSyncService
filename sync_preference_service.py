@@ -43,4 +43,9 @@ def get_preference(user_id):
     else:
         abort(404, "Preference Not Found")
 
+
+@route('/ping')
+def ping():
+    return "Pong!"
+
 application = default_app()
