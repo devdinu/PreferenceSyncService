@@ -1,9 +1,12 @@
 from bottle import route, run, get, delete, post, request, abort, default_app
-from pymongo import MongoClient
 import json
+from pymongo import MongoClient
+import os
 
-client = MongoClient('localhost', 27017)
-preference_collection = client.preference_db.preferences
+uri = os.environ['OPENSHIFT_MONGODB_DB_URL']
+print("Trying to connect to " + uri)
+preference_collection = MongoClient(uri).prefsync.preferences
+
 DOT_CHAR = "."
 DOT_UNICODE = "\\uff0"
 
@@ -46,6 +49,7 @@ def get_preference(user_id):
 
 @route('/ping')
 def ping():
+    print("Successful request....")
     return "Pong!"
 
 application = default_app()
