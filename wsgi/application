@@ -2,8 +2,12 @@
 
 import os
 
-virtenv = os.environ['APPDIR'] + '/virtenv/'
-os.environ['PYTHON_EGG_CACHE'] = os.path.join(virtenv, 'lib/python2.6/site-packages')
+sys.path.insert(0, os.path.dirname(__file__) or '.')
+PY_DIR = os.path.join(os.environ['OPENSHIFT_HOMEDIR'], "python")
+PY_CACHE = os.path.join(virtenv, 'lib', 'python'+os.environ['OPENSHIFT_PYTHON_VERSION'], 'site-packages')
+
+virtenv = PY_DIR + '/virtenv/venv'
+os.environ['PYTHON_EGG_CACHE'] = os.path.join(PY_CACHE)
 virtualenv = os.path.join(virtenv, 'bin/activate_this.py')
 try:
     execfile(virtualenv, dict(__file__=virtualenv))
