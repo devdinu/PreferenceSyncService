@@ -46,6 +46,17 @@ def get_preference(user_id):
     else:
         abort(404, "Preference Not Found")
 
+@get('/users/<user_id>/files/<file_name>/content.json')
+def get_file_content(user_id, file_name):
+    file_content = request.body.read().decode("utf-8")
+    file_name = file_name.replace(DOT_CHAR, DOT_UNICODE)
+    data_to_fetch = {'user_id': user_id, 'file_name': file_name}
+    result = preference_collection.find_one(data_to_fetch)
+    if result:
+        print("result found!!!!")
+        return result['content']
+    abort(404, "Preference Not Found")
+
 
 @route('/ping')
 def ping():
