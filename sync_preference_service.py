@@ -20,7 +20,7 @@ def add_preference(user_id):
                       'preference': user_preference}
     upserted_record = preference_collection.update(
         {'user_id': user_id}, {"$set": data_to_update}, upsert=True)
-    return str(upserted_record.updatedExisting)
+    # return str(upserted_record.updatedExisting)
 
 
 @post('/users/<user_id>/files/<file_name>/sync.json')
