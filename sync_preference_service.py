@@ -20,7 +20,7 @@ def add_preference(user_id):
                       'preference': user_preference}
     upserted_record = preference_collection.update(
         {'user_id': user_id}, {"$set": data_to_update}, upsert=True)
-    return str(upserted_record.upserted_id)
+    return str(upserted_record.updatedExisting)
 
 
 @post('/users/<user_id>/files/<file_name>/sync.json')
@@ -30,12 +30,12 @@ def add_file(user_id, file_name):
     data_to_store = {'user_id': user_id, 'file_name': file_name, 'content': file_content}
     upserted_file = preference_collection.replace(
         {'user_id': user_id, 'file_name': file_name}, data_to_store, upsert=True)
-    return str(upserted_file.upserted_id)
+    # return str(upserted_file.updatedExisting)
 
 
 @delete('/users/<user_id>/preferences/destroy')
 def delete_preference(user_id):
-    return str(preference_collection.delete({'user_id': user_id}).deleted_count)
+    preference_collection.delete({'user_id': user_id})
 
 
 @get('/users/<user_id>/preferences.json')
@@ -46,7 +46,7 @@ def get_preference(user_id):
     else:
         abort(404, "Preference Not Found")
 
-@get('/users/<user_id>/files/<file_name>/content.json')
+@get('/users/<user_id>`/files/<file_name>/content.json')
 def get_file_content(user_id, file_name):
     file_content = request.body.read().decode("utf-8")
     file_name = file_name.replace(DOT_CHAR, DOT_UNICODE)
