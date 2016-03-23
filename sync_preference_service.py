@@ -18,7 +18,7 @@ def add_preference(user_id):
     print("storing information for user_id:" + user_id)
     data_to_update = {'user_id': user_id,
                       'preference': user_preference}
-    upserted_record = preference_collection.update_one(
+    upserted_record = preference_collection.update(
         {'user_id': user_id}, {"$set": data_to_update}, upsert=True)
     return str(upserted_record.upserted_id)
 
@@ -28,19 +28,19 @@ def add_file(user_id, file_name):
     file_content = request.body.read().decode("utf-8")
     file_name = file_name.replace(DOT_CHAR, DOT_UNICODE)
     data_to_store = {'user_id': user_id, 'file_name': file_name, 'content': file_content}
-    upserted_file = preference_collection.replace_one(
+    upserted_file = preference_collection.replace(
         {'user_id': user_id, 'file_name': file_name}, data_to_store, upsert=True)
     return str(upserted_file.upserted_id)
 
 
 @delete('/users/<user_id>/preferences/destroy')
 def delete_preference(user_id):
-    return str(preference_collection.delete_one({'user_id': user_id}).deleted_count)
+    return str(preference_collection.delete({'user_id': user_id}).deleted_count)
 
 
 @get('/users/<user_id>/preferences.json')
 def get_preference(user_id):
-    user_pref = preference_collection.find_one({'user_id': user_id})
+    user_pref = preference_collection.find({'user_id': user_id})
     if user_pref:
         return user_pref['preference']
     else:
@@ -51,7 +51,7 @@ def get_file_content(user_id, file_name):
     file_content = request.body.read().decode("utf-8")
     file_name = file_name.replace(DOT_CHAR, DOT_UNICODE)
     data_to_fetch = {'user_id': user_id, 'file_name': file_name}
-    result = preference_collection.find_one(data_to_fetch)
+    result = preference_collection.find(data_to_fetch)
     if result:
         print("result found!!!!")
         return result['content']
