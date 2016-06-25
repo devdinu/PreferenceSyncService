@@ -25,9 +25,10 @@ def add_preference(user_id):
 
 @post('/users/<user_id>/files/<file_name>/sync.json')
 def add_file(user_id, file_name):
-    file_content = request.body.read().decode("utf-8")
-    file_name = file_name.replace(DOT_CHAR, DOT_UNICODE)
-    data_to_store = {'user_id': user_id, 'file_name': file_name, 'content': file_content}
+    body = request.json
+    print(body)
+    file_name = body['file_name'].replace(DOT_CHAR, DOT_UNICODE)
+    data_to_store = {'user_id': user_id, 'file_name': file_name, 'content': body['content'], 'dir': body['dir']}
     upserted_file = preference_collection.update(
         {'user_id': user_id, 'file_name': file_name}, data_to_store, upsert=True)
     # return str(upserted_file.updatedExisting)
@@ -46,7 +47,7 @@ def get_preference(user_id):
     else:
         abort(404, "Preference Not Found")
 
-@get('/users/<user_id>`/files/<file_name>/content.json')
+@get('/users/<user_id>/files/<file_name>/content.json')
 def get_file_content(user_id, file_name):
     file_content = request.body.read().decode("utf-8")
     file_name = file_name.replace(DOT_CHAR, DOT_UNICODE)
@@ -64,3 +65,5 @@ def ping():
     return "Pong!"
 
 application = default_app()
+
+# application.run(host='localhost', port=8888, debug=True, reloader=True)
